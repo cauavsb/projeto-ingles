@@ -145,12 +145,17 @@ const sufixos = [
     },
 ];
 
+const startTime = new Date();
+
 const sufixoElement = document.getElementById("suffix");
 const opcoesButtons = document.querySelectorAll("#options button");
 const resultadoDiv = document.getElementById("result");
 const proximoBotao = document.getElementById("proximo");
+const avisoElement = document.getElementById("aviso");
 
 let indiceSufixo = 0;
+let respostasCorretas = 0;
+let opcaoSelecionada = false;
 
 function exibirSufixo() {
     const sufixo = sufixos[indiceSufixo];
@@ -172,12 +177,30 @@ function proximoSufixo() {
 
     if (indiceSufixo < sufixos.length - 1) {
         indiceSufixo++;
-        exibirSufixo();
     } 
     else {
-        indiceSufixo = 0;
-        exibirSufixo();
+        const endTime = new Date(); 
+        const tempoGasto = (endTime - startTime) / 1000;
+
+        const mensagem1 = document.querySelector("h1");
+        const mensagem2 = document.getElementById("options");
+        const mensagem3 = document.getElementById("diferente");
+        sufixoElement.innerText = "";
+        mensagem1.innerText = "PARABÉNS!";
+        mensagem2.innerText = `Você acertou ${respostasCorretas}/18 perguntas!`;
+        mensagem2.innerHTML += `<br> <br> Tempo gasto: ${tempoGasto.toFixed(2)}`;
+        mensagem3.innerText = "Reiniciar";
+
+        proximoBotao.disabled = true;
+
+        proximoBotao.addEventListener("click", function() {
+            window.location.href = "index.html";
+        });
+
+        return;
     }
+
+    exibirSufixo();
 }
 
 function verificarResposta(resposta) {
@@ -186,6 +209,7 @@ function verificarResposta(resposta) {
     const exemplos = sufixo.respostaCorreta.exemplos;
 
     if (resposta === respostaCorreta) {
+        respostasCorretas++;
         resultadoDiv.innerHTML = "Resposta correta! 🎉";
         if (exemplos && exemplos.length > 0) {
             resultadoDiv.innerHTML += "<br><br>Exemplos:<br>" + exemplos.join('<br>');
@@ -203,11 +227,20 @@ opcoesButtons.forEach((botao, index) => {
     botao.addEventListener("click", function() {
         const respostaSelecionada = sufixos[indiceSufixo].opcoes[index];
         verificarResposta(respostaSelecionada);
+        opcaoSelecionada = true;
+        proximoBotao.disabled = false;
+        avisoElement.classList.add("hidden");
     });
 });
 
 exibirSufixo();
 
 proximoBotao.addEventListener("click", function() {
-    proximoSufixo();
+    if (opcaoSelecionada) {
+        proximoSufixo();
+        opcaoSelecionada = false;
+        proximoBotao.disabled = true;
+    } else {
+        avisoElement.classList.remove("hidden");
+    }
 });

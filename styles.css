@@ -48,3 +48,13 @@ button:hover {
 #proximo {
     text-align: right;
 }
+
+#aviso {
+    margin-top: 10px;
+    background-color: red;
+    padding: 10px;
+}
+
+.hidden {
+    display: none;
+}
