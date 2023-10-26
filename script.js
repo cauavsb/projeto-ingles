@@ -189,6 +189,7 @@ function proximoSufixo() {
         mensagem1.innerText = "PARABÉNS!";
         mensagem2.innerText = `Você acertou ${respostasCorretas}/18 perguntas!`;
         mensagem2.innerHTML += `<br> <br> Tempo gasto: ${tempoGasto.toFixed(2)}`;
+        mensagem2.innerHTML += `<br> <br> Resultado: ${(tempoGasto / (respostasCorretas - ((18 - respostasCorretas) / 2))).toFixed(2)}`
         mensagem3.innerText = "Voltar tudo...";
 
         proximoBotao.disabled = true;
